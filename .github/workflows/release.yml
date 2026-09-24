@@ -5,6 +5,9 @@ on:
         tags:
             - "*"
 
+permissions:
+  contents: write
+
 jobs:
     goreleaser:
         runs-on: codebuild-stellaraf-actions-public-${{ github.run_id }}-${{ github.run_attempt }}
@@ -16,18 +19,18 @@ jobs:
               with:
                   fetch-depth: 0
             - name: Set up Go
-              uses: actions/setup-go@v4
+              uses: actions/setup-go@v5
               with:
                   go-version: "1.22.1"
             - name: Run GoReleaser
-              uses: goreleaser/goreleaser-action@v5
+              uses: goreleaser/goreleaser-action@v6
               with:
-                  version: latest
-                  args: release --rm-dist
+                  version: v1.26.2
+                  args: release --clean
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Upload assets
-              uses: actions/upload-artifact@v2
+              uses: actions/upload-artifact@v4
               with:
                   name: panw-device-state-export
                   path: dist/*
